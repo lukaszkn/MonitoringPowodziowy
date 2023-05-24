@@ -7,10 +7,14 @@
 
 import Foundation
 
-struct StationTableData: Codable {
+struct StationTableData: Codable, Identifiable, Hashable {
     var czas: String
     var wartosc: String
     var p_ostrzegawczy: String
     var p_alarmowy: String
     var swiatlo: String
+    
+    var id: String {
+        czas
+    }
 }

@@ -10,29 +10,32 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 50.037, longitude: 22.50528), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
-    
-    @State private var selectedStation: StationData?
+    @State private var showingDetails = false
     @StateObject private var mainViewModel = MainViewModel()
     
     var body: some View {
         NavigationView {
             TabView {
                 VStack {
-                    Map(coordinateRegion: $mapRegion, annotationItems: mainViewModel.stations) { station in
+                    Map(coordinateRegion: $mainViewModel.mapRegion, annotationItems: mainViewModel.stations) { station in
                         MapAnnotation(coordinate: station.coordinate) {
                             VStack {
                                 Circle()
                                     .frame(width: 35, height: 35)
                                     .overlay {
-                                        Image(systemName: "mappin.circle.fill")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 30, weight: .bold))
+                                            Image(systemName: "mappin.circle.fill")
+                                                .foregroundColor(
+                                                    station.isRedWarning ? .red
+                                                    : station.isYellowWarning ? .yellow
+                                                    : .white
+                                                )
+                                                .font(.system(size: 30, weight: .bold))
                                     }
-                                
+                                    
                             }
                             .onTapGesture {
-                                selectedStation = station
+                                mainViewModel.selectedStation = station
+                                showingDetails = true
                             }
                         }
                     }
@@ -41,8 +44,7 @@ struct MainView: View {
                     Label("Mapa", systemImage: "map")
                 }
                 
-                StationListView(selectedStation: $selectedStation,
-                                mainViewModel: mainViewModel)
+                StationListView(showingDetails: $showingDetails, mainViewModel: mainViewModel)
                     .tabItem {
                         Label("Lista stacji", systemImage: "list.bullet")
                     }
@@ -52,14 +54,18 @@ struct MainView: View {
                 ToolbarItem(placement: .principal) {
                     VStack {
                         Text("Ostatnia aktualizacja:").font(.subheadline)
-                        Text("20-05-23 21:49").font(.subheadline)
+                        if let time = mainViewModel.lastUpdated {
+                            Text(time, style: .time).font(.subheadline)
+                        } else {
+                            Text("(nigdy)").font(.subheadline)
+                        }
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
-                        Text("Rzeka 1")
-                        Text("Rzeka 2")
-                        Text("Rzeka 3")
+                        ForEach(River.list, id: \.id) { river in
+                            Text(river.name)
+                        }
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
@@ -75,8 +81,8 @@ struct MainView: View {
                 }
             }
             .navigationTitle(Text("Mleczka"))
-            .sheet(item: $selectedStation) { station in
-                StationDetailsView(station: station)
+            .sheet(isPresented: $showingDetails) {
+                StationDetailsView(station: mainViewModel.selectedStation!)
             }
             .onAppear() {
                 mainViewModel.getStations()

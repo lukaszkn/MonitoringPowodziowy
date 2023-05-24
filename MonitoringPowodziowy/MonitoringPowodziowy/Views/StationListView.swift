@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StationListView: View {
     
-    @Binding var selectedStation: StationData?
+    @Binding var showingDetails: Bool
     @ObservedObject var mainViewModel: MainViewModel
     
     var body: some View {
@@ -19,11 +19,23 @@ struct StationListView: View {
                     Text(station.miejsce)
                         .font(.title3)
                         .onTapGesture {
-                            selectedStation = station
+                            mainViewModel.selectedStation = station
+                            showingDetails = true
                         }
-                    Text("h = \(station.wartosc)cm (\(station.p_ostrzegawczy)cm / \(station.p_alarmowy)cm)")
-                        .font(.subheadline)
+                    VStack {
+                        Text("h = \(station.wartosc)cm (\(station.p_ostrzegawczy)cm / \(station.p_alarmowy)cm)")
+                            .font(.subheadline)
+                            .padding(.leading, 5)
+                            .padding(.trailing, 5)
+                            .background(
+                                station.isRedWarning ? .red
+                                    : station.isYellowWarning ? .yellow
+                                    : .white
+                            )
+                            .cornerRadius(15)
+                    }
                 }
+                
             }
         }
     }
@@ -32,11 +44,10 @@ struct StationListView: View {
 struct StationListView_Previews: PreviewProvider {
     static var previews: some View {
         
-        @State var station: StationData? = StationData(dl_geo: "0", szer_geo: "0")
+        @State var showingDetails = false
         let viewModel = MainViewModel()
         
-        StationListView(selectedStation: $station,
-                        mainViewModel: viewModel)
+        StationListView(showingDetails: $showingDetails, mainViewModel: viewModel)
             .onAppear() {
                 viewModel.getStations()
             }
