@@ -19,4 +19,14 @@ struct StationChartData: Codable, Identifiable {
     var id: String {
         czas
     }
+    
+    private static let scale = 100.0
+    
+    var scaledWartosc: Double {
+        if let newWartosc = Double(wartosc) {
+            return newWartosc / StationChartData.scale
+        } else {
+            return 0
+        }
+    }
 }

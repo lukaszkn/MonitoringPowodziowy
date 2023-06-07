@@ -8,6 +8,7 @@
 import Foundation
 
 // https://www.hackingwithswift.com/articles/141/8-useful-swift-extensions
+// https://developer.apple.com/tutorials/swiftui/building-lists-and-navigation
 extension Bundle {
     func decode<T: Decodable>(_ type: T.Type, from filename: String) -> T {
         guard let json = url(forResource: filename, withExtension: nil) else {

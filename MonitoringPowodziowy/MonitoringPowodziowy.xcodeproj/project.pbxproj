@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B283B6EF2A1D40A4005B8E03 /* River.swift in Sources */ = {isa = PBXBuildFile; fileRef = B283B6EE2A1D40A4005B8E03 /* River.swift */; };
+		B28764182A308EAF0008F83A /* StationMapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28764172A308EAF0008F83A /* StationMapPoint.swift */; };
+		B287641A2A30F48F0008F83A /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B28764192A30F48F0008F83A /* Launch Screen.storyboard */; };
 		B2908D4E2A19339500B095DC /* MonitoringApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2908D4D2A19339500B095DC /* MonitoringApp.swift */; };
 		B2908D502A19339500B095DC /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2908D4F2A19339500B095DC /* MainView.swift */; };
 		B2908D522A19339600B095DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2908D512A19339600B095DC /* Assets.xcassets */; };
@@ -37,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		B283B6EE2A1D40A4005B8E03 /* River.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = River.swift; sourceTree = "<group>"; };
+		B28764172A308EAF0008F83A /* StationMapPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapPoint.swift; sourceTree = "<group>"; };
+		B28764192A30F48F0008F83A /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		B2908D4A2A19339500B095DC /* MonitoringPowodziowy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonitoringPowodziowy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2908D4D2A19339500B095DC /* MonitoringApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoringApp.swift; sourceTree = "<group>"; };
 		B2908D4F2A19339500B095DC /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -104,6 +108,7 @@
 				B2908D5F2A193BBD00B095DC /* Service */,
 				B2908D5E2A193BAE00B095DC /* ViewModel */,
 				B2908D642A19499E00B095DC /* Views */,
+				B28764192A30F48F0008F83A /* Launch Screen.storyboard */,
 			);
 			path = MonitoringPowodziowy;
 			sourceTree = "<group>";
@@ -155,9 +160,10 @@
 		B2908D642A19499E00B095DC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B2908D4F2A19339500B095DC /* MainView.swift */,
 				B2908D652A1949DA00B095DC /* StationDetailsView.swift */,
 				B2908D772A19582000B095DC /* StationListView.swift */,
-				B2908D4F2A19339500B095DC /* MainView.swift */,
+				B28764172A308EAF0008F83A /* StationMapPoint.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -261,6 +267,7 @@
 			files = (
 				B2908D762A19500800B095DC /* mleczka.json in Resources */,
 				B2908D552A19339600B095DC /* Preview Assets.xcassets in Resources */,
+				B287641A2A30F48F0008F83A /* Launch Screen.storyboard in Resources */,
 				B2908D522A19339600B095DC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +296,7 @@
 				B2D58AE22A1E8A890066B9FB /* StationChartData.swift in Sources */,
 				B2908D7C2A1972D400B095DC /* StationDetailsViewModel.swift in Sources */,
 				B2908D7A2A196DA100B095DC /* StationTableData.swift in Sources */,
+				B28764182A308EAF0008F83A /* StationMapPoint.swift in Sources */,
 				B2908D662A1949DA00B095DC /* StationDetailsView.swift in Sources */,
 				B2908D752A194B7200B095DC /* MainViewModel.swift in Sources */,
 			);

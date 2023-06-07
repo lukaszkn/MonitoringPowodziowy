@@ -43,6 +43,10 @@ class MainViewModel: ObservableObject {
         }
         
     }
+    
+    func refresh() {
+        getStations()
+    }
 }
 
 extension Array where Element == CLLocationCoordinate2D {

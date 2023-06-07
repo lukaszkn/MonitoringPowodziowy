@@ -9,6 +9,12 @@ import Foundation
 import MapKit
 import UIKit
 
+enum StationWarningLevel {
+    case red
+    case yellow
+    case white
+}
+
 struct StationData: Codable, Identifiable {
     var id: String { id_ppwr }
     var id_ppwr: String = ""
@@ -24,12 +30,33 @@ struct StationData: Codable, Identifiable {
         return CLLocationCoordinate2D(latitude: Double(szer_geo) ?? 0, longitude: Double(dl_geo) ?? 0)
     }
     
+    var wartoscInt: Int { Int(wartosc) ?? 0 }
+    private var wartoscOstrzegawczy: Int { Int(p_ostrzegawczy) ?? 0 }
+    private var wartoscAlarmowy: Int { Int(p_alarmowy) ?? 0 }
+    
     var isRedWarning: Bool {
-        return /*Bool.random()*/ Int(wartosc) ?? 0 > Int(p_alarmowy) ?? 0
+        return wartoscInt >= wartoscAlarmowy
     }
     
     var isYellowWarning: Bool {
-        return /*Bool.random()*/ Int(wartosc) ?? 0 > Int(p_ostrzegawczy) ?? 0
+        return wartoscInt >= wartoscOstrzegawczy
     }
     
+    var warningLevelProgress: Double {
+        if isRedWarning {
+            return 1
+        } else if isYellowWarning {
+            return Double(wartoscInt - wartoscOstrzegawczy) / Double(wartoscAlarmowy - wartoscOstrzegawczy)
+        } else {
+            return Double(wartoscInt) / Double(wartoscOstrzegawczy)
+        }
+    }
+    
+    var levelPercentage: Double {
+        return Double(wartoscInt) / Double(wartoscAlarmowy)
+    }
+    
+    var warningPercentage: Double {
+        Double(wartoscAlarmowy - wartoscOstrzegawczy) / Double(wartoscAlarmowy)
+    }
 }

@@ -40,10 +40,9 @@ struct StationDetailsView: View {
                         List {
                             LabeledContent("Data pomiaru", value: station.czas)
                             LabeledContent("Stan lustra wody", value: "Poniżej stanu ostrzegawczego")
-                            LabeledContent("Wysokość lustra wody", value: "\(station.wartosc) cm")
-                            LabeledContent("Przyrost od ostatniego pomiaru", value: "34 cm")
-                            //LabeledContent("Wysokość nad poziomem morza", value: "239.13 m")
-                            
+                            LabeledContent("Wysokość lustra wody", value: "\(station.wartoscInt) cm")
+                            LabeledContent("Przyrost od ostatniego pomiaru",
+                                           value: "\(viewModel.lastDiff) cm")
                         }
                         .scrollDisabled(true)
                         .frame(height: 250)
@@ -59,16 +58,16 @@ struct StationDetailsView: View {
                                 
                                 LineMark(
                                     x: .value("Czas", point.czas),
-                                    y: .value("Wysokość", Int(point.scaledWartosc)! / 100)
+                                    y: .value("Wysokość", point.scaledWartosc)
                                 )
                                 .foregroundStyle(.blue)
                             }
                             
-                            RuleMark(y: .value("ff", Int(viewModel.chartData[0].p_ostrzegawczy!)!))
-                                .foregroundStyle(.yellow)
-                            
-                            RuleMark(y: .value("ff", Int(viewModel.chartData[0].p_alarmowy!)!))
-                                .foregroundStyle(.red)
+//                            RuleMark(y: .value("ff", Int(viewModel.chartData[0].p_ostrzegawczy!)!))
+//                                .foregroundStyle(.yellow)
+//                            
+//                            RuleMark(y: .value("ff", Int(viewModel.chartData[0].p_alarmowy!)!))
+//                                .foregroundStyle(.red)
                             
                         }
                         .chartYScale(domain: [0, (Int(viewModel.chartData[0].p_alarmowy!)! + 50)])
@@ -92,15 +91,21 @@ struct StationDetailsView: View {
                             Text("Przyrost\n(cm)")
                         }
                         Divider()
-                        ForEach(Array(viewModel.tableData.enumerated()), id: \.element) { index, element in
-                            GridRow {
-                                Text(element.czas)
-                                Text(element.wartosc)
-//                                Text(index < viewModel.tableData.count - 1 ?
-//                                     viewModel.tableData[index] - viewModel.tableData[index + 1] : "")
+                        
+                        if viewModel.tableData.count == 0 {
+                            ProgressView()
+                                .frame(height: 70)
+                        } else {
+                            ForEach(viewModel.tableData) { row in
+                                GridRow {
+                                    Text(row.czas)
+                                    Text(row.wartosc)
+                                    Text(String(describing: row.diff))
+                                }
+                                Divider()
                             }
-                            Divider()
                         }
+                        
                     }
                     .background(.white)
                     .cornerRadius(10)

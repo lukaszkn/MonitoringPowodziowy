@@ -19,26 +19,25 @@ struct MainView: View {
                 VStack {
                     Map(coordinateRegion: $mainViewModel.mapRegion, annotationItems: mainViewModel.stations) { station in
                         MapAnnotation(coordinate: station.coordinate) {
-                            VStack {
-                                Circle()
-                                    .frame(width: 35, height: 35)
-                                    .overlay {
-                                            Image(systemName: "mappin.circle.fill")
-                                                .foregroundColor(
-                                                    station.isRedWarning ? .red
-                                                    : station.isYellowWarning ? .yellow
-                                                    : .white
-                                                )
-                                                .font(.system(size: 30, weight: .bold))
-                                    }
-                                    
-                            }
+                            StationMapPoint(warningLevel: station.isRedWarning ? .red
+                                            : station.isYellowWarning ? .yellow
+                                            : .white,
+                                            progress: station.warningLevelProgress)
                             .onTapGesture {
                                 mainViewModel.selectedStation = station
                                 showingDetails = true
                             }
                         }
                     }
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(Color(white: 0.9))
+                            .padding(0)
+                            .frame(height: 30)
+                            .background(Color(UIColor.lightGray))
+                        Text("https://monitoring.prospect.pl/")
+                    }
+                    .offset(y: -8)
                 }
                 .tabItem {
                     Label("Mapa", systemImage: "map")
@@ -73,7 +72,7 @@ struct MainView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        print("refresh")
+                        mainViewModel.refresh()
                     } label: {
                         Image(systemName: "arrow.clockwise")
                     }
@@ -85,7 +84,7 @@ struct MainView: View {
                 StationDetailsView(station: mainViewModel.selectedStation!)
             }
             .onAppear() {
-                mainViewModel.getStations()
+                mainViewModel.refresh()
             }
         }
         

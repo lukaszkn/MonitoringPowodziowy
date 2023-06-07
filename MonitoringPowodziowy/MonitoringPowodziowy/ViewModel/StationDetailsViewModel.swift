@@ -14,6 +14,10 @@ class StationDetailsViewModel: ObservableObject {
     @Published var tableData: [StationTableData] = [StationTableData]()
     @Published var chartData: [StationChartData] = [StationChartData]()
     
+    var lastDiff: String {
+        tableData.count > 1 ? String(describing: tableData[0].wartoscInt - tableData[1].wartoscInt) : ""
+    }
+    
     func getStationTableData(station: StationData) {
         service.getStationTableData(riverId: "mleczka",
                                     stationId: station.id_ppwr,
@@ -21,8 +25,17 @@ class StationDetailsViewModel: ObservableObject {
             
             switch result {
             case .success(let tableData):
-                print("rows \(tableData.count)")
-                self?.tableData = tableData
+                
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                strongSelf.tableData = tableData
+                
+                for index in tableData.indices.dropLast() {
+                    strongSelf.tableData[index].diff = strongSelf.tableData[index].wartoscInt - strongSelf.tableData[index + 1].wartoscInt
+                }
+                
                 
             case .failure(_):
                 _ = Alert.init(title: Text("Bląd pobierania danych"))

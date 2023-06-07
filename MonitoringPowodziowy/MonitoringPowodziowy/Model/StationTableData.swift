@@ -17,4 +17,15 @@ struct StationTableData: Codable, Identifiable, Hashable {
     var id: String {
         czas
     }
+    
+    enum CodingKeys: CodingKey {
+        case czas
+        case wartosc
+        case p_ostrzegawczy
+        case p_alarmowy
+        case swiatlo
+    }
+    
+    var wartoscInt: Int { Int(wartosc) ?? 0 }
+    var diff: Int = 0
 }

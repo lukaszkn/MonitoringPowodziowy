@@ -15,27 +15,51 @@ struct StationListView: View {
     var body: some View {
         List {
             ForEach(mainViewModel.stations) { station in
-                VStack(alignment: .leading) {
-                    Text(station.miejsce)
-                        .font(.title3)
-                        .onTapGesture {
-                            mainViewModel.selectedStation = station
-                            showingDetails = true
-                        }
-                    VStack {
-                        Text("h = \(station.wartosc)cm (\(station.p_ostrzegawczy)cm / \(station.p_alarmowy)cm)")
-                            .font(.subheadline)
-                            .padding(.leading, 5)
-                            .padding(.trailing, 5)
-                            .background(
-                                station.isRedWarning ? .red
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(station.miejsce)
+                            .font(.title3)
+                            .onTapGesture {
+                                mainViewModel.selectedStation = station
+                                showingDetails = true
+                            }
+                        VStack {
+                            Text("h = \(station.wartoscInt)cm (\(station.p_ostrzegawczy)cm / \(station.p_alarmowy)cm)")
+                                .font(.subheadline)
+                                .padding(.leading, 5)
+                                .padding(.trailing, 5)
+                                .background(
+                                    station.isRedWarning ? .red
                                     : station.isYellowWarning ? .yellow
                                     : .white
-                            )
-                            .cornerRadius(15)
+                                )
+                                .cornerRadius(15)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    ZStack {
+                        Rectangle()
+                            .border(.blue.opacity(0.5))
+                            .foregroundColor(.blue.opacity(0.15))
+                            .frame(width: 20)
+                        
+                        Rectangle()
+                            .scale(y: station.warningPercentage, anchor: .top)
+                            .foregroundColor(Color(hue: 0.16, saturation: 0.07, brightness: 1))
+                            .frame(width: 18)
+                            .offset(y: 1)
+                            
+                        Rectangle()
+                            .scale(y: station.levelPercentage, anchor: .bottom)
+                            .foregroundColor(station.isRedWarning ? .red
+                                             : station.isYellowWarning ? .yellow
+                                             : .blue)
+                            .frame(width: 18)
+                            .offset(y: -1)
                     }
                 }
-                
             }
         }
     }
