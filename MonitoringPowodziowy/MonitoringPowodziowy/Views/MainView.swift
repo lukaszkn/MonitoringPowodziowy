@@ -63,7 +63,10 @@ struct MainView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
                         ForEach(River.list, id: \.id) { river in
-                            Text(river.name)
+                            Button(river.name) {
+                                mainViewModel.selectedRiver = river
+                                print(river.name)
+                            }
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")

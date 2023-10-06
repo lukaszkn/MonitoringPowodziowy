@@ -18,6 +18,30 @@ class StationDetailsViewModel: ObservableObject {
         tableData.count > 1 ? String(describing: tableData[0].wartoscInt - tableData[1].wartoscInt) : ""
     }
     
+    var scaledYellowWarningLevel: Double {
+        guard chartData.count > 0 else {
+            return 0
+        }
+        
+        if let value = chartData[0].p_ostrzegawczy {
+            return Double(value) / StationChartData.scale
+        } else {
+            return 0
+        }
+    }
+    
+    var scaledRedWarningLevel: Double {
+        guard chartData.count > 0 else {
+            return 0
+        }
+        
+        if let value = chartData[0].p_alarmowy {
+            return Double(value) / StationChartData.scale
+        } else {
+            return 0
+        }
+    }
+    
     func getStationTableData(station: StationData) {
         service.getStationTableData(riverId: "mleczka",
                                     stationId: station.id_ppwr,

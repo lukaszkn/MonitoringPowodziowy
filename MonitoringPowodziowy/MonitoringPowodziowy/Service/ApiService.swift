@@ -25,6 +25,7 @@ class ApiService {
                 let result = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(result))
             } catch {
+                print(error)
                 completion(.failure(.decodingFailed))
             }
         }.resume()

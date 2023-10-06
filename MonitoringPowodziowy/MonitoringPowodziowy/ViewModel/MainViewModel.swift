@@ -10,6 +10,8 @@ import MapKit
 
 class MainViewModel: ObservableObject {
     let service = ApiService()
+    
+    var selectedRiver: River
     var selectedStation: StationData?
     
     @Published var lastUpdated: Date?
@@ -17,6 +19,12 @@ class MainViewModel: ObservableObject {
     @Published var mapRegion: MKCoordinateRegion
     
     init() {
+        if let riverId = UserDefaults.standard.string(forKey: "selectedRiver") {
+            selectedRiver = River.list.filter { $0.id == riverId }[0]
+        } else {
+            selectedRiver = River.list.filter { $0.id == "mleczka" }[0]
+        }
+        
         mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 50.037, longitude: 22.50528),
                                        span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
     }

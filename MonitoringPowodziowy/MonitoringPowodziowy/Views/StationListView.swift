@@ -24,7 +24,7 @@ struct StationListView: View {
                                 showingDetails = true
                             }
                         VStack {
-                            Text("h = \(station.wartoscInt)cm (\(station.p_ostrzegawczy)cm / \(station.p_alarmowy)cm)")
+                            Text("h = \(station.wartosc)cm (\(station.p_ostrzegawczy)cm / \(station.p_alarmowy)cm)")
                                 .font(.subheadline)
                                 .padding(.leading, 5)
                                 .padding(.trailing, 5)

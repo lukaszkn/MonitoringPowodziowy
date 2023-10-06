@@ -39,8 +39,8 @@ struct StationDetailsView: View {
                     ZStack {
                         List {
                             LabeledContent("Data pomiaru", value: station.czas)
-                            LabeledContent("Stan lustra wody", value: "Poniżej stanu ostrzegawczego")
-                            LabeledContent("Wysokość lustra wody", value: "\(station.wartoscInt) cm")
+                            LabeledContent("Stan lustra wody", value: station.isRedWarning ? "Powyżej stanu alarmowego" : station.isYellowWarning ? "Powyżej stanu ostrzegawczego" : "Poniżej stanu ostrzegawczego")
+                            LabeledContent("Wysokość lustra wody", value: "\(station.wartosc) cm")
                             LabeledContent("Przyrost od ostatniego pomiaru",
                                            value: "\(viewModel.lastDiff) cm")
                         }
@@ -57,27 +57,35 @@ struct StationDetailsView: View {
                             ForEach(viewModel.chartData) { point in
                                 
                                 LineMark(
-                                    x: .value("Czas", point.czas),
+                                    x: .value("Czas", point.dateTime!),
                                     y: .value("Wysokość", point.scaledWartosc)
                                 )
                                 .foregroundStyle(.blue)
                             }
                             
-//                            RuleMark(y: .value("ff", Int(viewModel.chartData[0].p_ostrzegawczy!)!))
-//                                .foregroundStyle(.yellow)
-//                            
-//                            RuleMark(y: .value("ff", Int(viewModel.chartData[0].p_alarmowy!)!))
-//                                .foregroundStyle(.red)
+                            RuleMark(y: .value("Ostrzegawczy", viewModel.scaledYellowWarningLevel))
+                                .foregroundStyle(.yellow)
+                            
+                            RuleMark(y: .value("Alarmowy", viewModel.scaledRedWarningLevel))
+                                .foregroundStyle(.red)
                             
                         }
-                        .chartYScale(domain: [0, (Int(viewModel.chartData[0].p_alarmowy!)! + 50)])
                         .chartYAxis {
-                            AxisMarks(values: .automatic(desiredCount: 5))
+                            AxisMarks(values: .automatic(desiredCount: Int(viewModel.scaledRedWarningLevel) + 1))
+                        }
+                        .chartXAxis {
+                            AxisMarks(values: .automatic(desiredCount: 12)) { value in
+                                AxisValueLabel(format: .dateTime.locale(.init(identifier: "pl_PL")).hour().minute())
+                                
+                                AxisGridLine()
+                                AxisTick()
+                            }
                         }
                         .padding(20)
                         .frame(height: 300)
                     } else {
                         ProgressView()
+                            .frame(height: 70)
                     }
                     
                     Text("Tabela aktualnych pomiarów")
@@ -99,7 +107,7 @@ struct StationDetailsView: View {
                             ForEach(viewModel.tableData) { row in
                                 GridRow {
                                     Text(row.czas)
-                                    Text(row.wartosc)
+                                    //Text(row.wartoscInt)
                                     Text(String(describing: row.diff))
                                 }
                                 Divider()

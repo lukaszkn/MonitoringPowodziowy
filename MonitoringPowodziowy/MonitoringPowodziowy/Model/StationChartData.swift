@@ -8,25 +8,27 @@
 import Foundation
 
 struct StationChartData: Codable, Identifiable {
-    var wartosc: String
+    var wartosc: Double
     var czas: String
-    var npm: String?
-    var p_ostrzegawczy: String?
-    var p_alarmowy: String?
-    var zero: String?
-    var swiatlo: String?
+    var npm: Int?
+    var p_ostrzegawczy: Int?
+    var p_alarmowy: Int?
+    var zero: Double?
+    var swiatlo: Int?
     
     var id: String {
         czas
     }
     
-    private static let scale = 100.0
+    public static let scale = 100.0
     
     var scaledWartosc: Double {
-        if let newWartosc = Double(wartosc) {
-            return newWartosc / StationChartData.scale
-        } else {
-            return 0
-        }
+        return wartosc / StationChartData.scale
+    }
+    
+    var dateTime: Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter.date(from: czas)
     }
 }

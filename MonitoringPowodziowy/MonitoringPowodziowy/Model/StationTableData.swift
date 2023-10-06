@@ -9,10 +9,10 @@ import Foundation
 
 struct StationTableData: Codable, Identifiable, Hashable {
     var czas: String
-    var wartosc: String
-    var p_ostrzegawczy: String
-    var p_alarmowy: String
-    var swiatlo: String
+    var wartosc: Int
+    var p_ostrzegawczy: Int
+    var p_alarmowy: Int
+    var swiatlo: Int
     
     var id: String {
         czas
